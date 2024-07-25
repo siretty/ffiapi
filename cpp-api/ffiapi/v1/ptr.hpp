@@ -78,7 +78,3 @@ constexpr void ptr<T>::swap(ptr & other) noexcept
 }
 
 } // namespace ffiapi::v1
-
-namespace ffiapi {
-using namespace v1;
-} // namespace ffiapi
