@@ -1,0 +1,10 @@
+[package]
+name = "simple-imp"
+version = "0.0.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+ffiapi-v1-imp = { version = "0", path = "../../ffiapi-v1-imp" }

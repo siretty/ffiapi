@@ -9,7 +9,7 @@ impl Object {
     pub fn into_arc<T>(self) -> Arc<T> {
         let bytes = self.0[0..core::mem::size_of::<usize>()]
             .try_into()
-            .expect("object storage too small");
+            .expect("ptrobj storage too small");
 
         let address = usize::from_le_bytes(bytes);
 

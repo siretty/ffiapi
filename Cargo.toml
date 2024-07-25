@@ -1,5 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-    "common/rust/imp",
+    "ffiapi-v1-imp",
+    "testing/simple-imp",
 ]
