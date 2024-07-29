@@ -12,12 +12,18 @@ target_include_directories(ffiapi-cpp-api
 )
 
 target_sources(ffiapi-cpp-api
-        INTERFACE FILE_SET HEADERS FILES ffiapi/v1/ptr.hpp
+        INTERFACE FILE_SET HEADERS FILES ffiapi/v1/arg.hpp
+        INTERFACE FILE_SET HEADERS FILES ffiapi/v1/arg.ipp
+        INTERFACE FILE_SET HEADERS FILES ffiapi/v1/obj.hpp
+        INTERFACE FILE_SET HEADERS FILES ffiapi/v1/obj.ipp
+        INTERFACE FILE_SET HEADERS FILES ffiapi/v1.hpp
 )
 
 if (BUILD_TESTING)
     add_executable(ffiapi-api-cpp-unit-tests
-            ffiapi/v1/ptr.test.cpp
+            ffiapi/test-main.cpp
+            ffiapi/v1/arg.test.cpp
+            ffiapi/v1/obj.test.cpp
     )
 
     target_link_libraries(ffiapi-api-cpp-unit-tests

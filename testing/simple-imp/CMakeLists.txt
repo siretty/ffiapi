@@ -29,7 +29,4 @@ add_custom_target(ffiapi-testing-simple-imp-cargo
         "${_simple_imp_release_library}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/.."
         COMMENT "Building simple-imp with cargo"
-        SOURCES
-        Cargo.toml
-        src/lib.rs
 )

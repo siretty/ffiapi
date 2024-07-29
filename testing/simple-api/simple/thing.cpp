@@ -9,7 +9,7 @@ thing::thing()
 
 thing::~thing()
 {
-    if (pointer != nullptr)
+    if (_obj)
     {
         destroy();
     }
@@ -17,12 +17,12 @@ thing::~thing()
 
 void thing::create()
 {
-    ffi::simple_thing_create(&pointer);
+    simple_ffi::simple_thing_create(&_obj);
 }
 
 void thing::destroy()
 {
-    ffi::simple_thing_destroy(&pointer);
+    simple_ffi::simple_thing_destroy(&_obj);
 }
 
 } // namespace simple

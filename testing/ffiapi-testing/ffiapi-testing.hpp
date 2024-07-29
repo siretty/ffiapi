@@ -148,7 +148,7 @@ void assert_false(std::string_view s, T && t, std::source_location source_locati
                                                                FFIAPI_TESTING_TEST_IDENTIFIER(_test_function_, id));   \
     FFIAPI_TESTING_ATTR_NOINLINE void FFIAPI_TESTING_TEST_IDENTIFIER(_test_function_, id)()
 
-#define ASSERT_TRUE(...) ::ffiapi_testing::assert_true(#__VA_ARGS__, (__VA_ARGS__))
+#define ASSERT(...) ::ffiapi_testing::assert_true(#__VA_ARGS__, (__VA_ARGS__))
 
 #define ASSERT_FALSE(...) ::ffiapi_testing::assert_false(#__VA_ARGS__, (__VA_ARGS__))
 
