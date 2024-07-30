@@ -1,0 +1,4 @@
+#undef FFIAPI_V1_COMPILED_SOURCE
+#define FFIAPI_V1_INCLUDE_SOURCE
+#include "ffiapi/v1.hpp"
+#undef FFIAPI_V1_INCLUDE_SOURCE

@@ -9,6 +9,7 @@ add_library(ffiapi-testing-simple-api STATIC
 
 target_sources(ffiapi-testing-simple-api
         PUBLIC FILE_SET HEADERS FILES
+        simple/ffi.hpp
         simple/thing.hpp
 )
 

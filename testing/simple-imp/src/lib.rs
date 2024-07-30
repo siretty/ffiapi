@@ -1,4 +1,4 @@
-use ffiapi_v1_imp::obj::{Obj, ObjValueType};
+use ffiapi_v1_imp::obj::{Obj, ArcObjValueType};
 use std::sync::Arc;
 
 #[derive(Default)]
@@ -10,9 +10,7 @@ impl Thing {
     pub fn new(value: u64) -> Self { Self { value } }
 }
 
-impl ObjValueType for Thing {
-    type Target = Arc<Self>;
-}
+impl ArcObjValueType for Thing {}
 
 #[no_mangle]
 pub unsafe extern "C" fn simple_thing_create(_this: *mut Obj<Thing>) {

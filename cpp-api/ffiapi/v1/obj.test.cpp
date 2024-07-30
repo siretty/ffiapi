@@ -14,7 +14,7 @@ ADD_TEST("obj default constructor is null")
     const ffiapi::v1::obj<void> o;
 
     ASSERT(!o);
-    ASSERT(o.pointer == nullptr);
+    ASSERT(o._pointer == nullptr);
 }
 
 ADD_TEST("obj _pointer constructor")
@@ -25,7 +25,7 @@ ADD_TEST("obj _pointer constructor")
     ffiapi::v1::obj<void> o{p};
 
     ASSERT(o);
-    ASSERT(o.pointer == p);
+    ASSERT(o._pointer == p);
 }
 
 ADD_TEST("obj move constructor leaves null")
@@ -35,14 +35,14 @@ ADD_TEST("obj move constructor leaves null")
 
     auto o_src = ffiapi::v1::obj<void>{p};
     ASSERT(o_src);
-    ASSERT(o_src.pointer == p);
+    ASSERT(o_src._pointer == p);
 
     ffiapi::v1::obj<void> o_dst{std::move(o_src)};
 
     ASSERT(!o_src);
-    ASSERT(o_src.pointer == nullptr);
+    ASSERT(o_src._pointer == nullptr);
     ASSERT(o_dst);
-    ASSERT(o_dst.pointer == p);
+    ASSERT(o_dst._pointer == p);
 }
 
 ADD_TEST("obj move assignment leaves null")
@@ -52,18 +52,18 @@ ADD_TEST("obj move assignment leaves null")
 
     auto o_src = ffiapi::v1::obj<void>{p};
     ASSERT(o_src);
-    ASSERT(o_src.pointer == p);
+    ASSERT(o_src._pointer == p);
 
     ffiapi::v1::obj<void> o_dst;
     ASSERT(!o_dst);
-    ASSERT(o_dst.pointer == nullptr);
+    ASSERT(o_dst._pointer == nullptr);
 
     o_dst = std::move(o_src);
 
     ASSERT(!o_src);
-    ASSERT(o_src.pointer == nullptr);
+    ASSERT(o_src._pointer == nullptr);
     ASSERT(o_dst);
-    ASSERT(o_dst.pointer == p);
+    ASSERT(o_dst._pointer == p);
 }
 
 } // namespace

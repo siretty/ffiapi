@@ -7,13 +7,11 @@
 namespace ffiapi::v1 {
 
 template <typename T>
-class arg;
-
-template <typename T>
-struct obj
+class obj
 {
-    T * pointer{nullptr};
+    T * _pointer{nullptr};
 
+public:
     constexpr obj() noexcept;
 
     constexpr explicit obj(T * pointer_) noexcept;
@@ -35,8 +33,6 @@ struct obj
     constexpr auto get() const noexcept -> T *;
 
     constexpr auto release() noexcept -> T *;
-
-    constexpr auto as_arg() const noexcept -> arg<T>;
 
     template <typename U>
     friend constexpr void swap(obj<U> & a, obj<U> & b) noexcept;

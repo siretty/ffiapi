@@ -17,12 +17,12 @@ thing::~thing()
 
 void thing::create()
 {
-    simple_ffi::simple_thing_create(&_obj);
+    ffi::simple_thing_create(&_obj);
 }
 
 void thing::destroy()
 {
-    simple_ffi::simple_thing_destroy(&_obj);
+    ffi::simple_thing_destroy(&_obj);
 }
 
 } // namespace simple

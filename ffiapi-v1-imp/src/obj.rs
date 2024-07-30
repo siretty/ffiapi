@@ -6,6 +6,12 @@ pub trait ObjValueType {
     type Target;
 }
 
+pub trait ArcObjValueType {}
+
+impl<T: ArcObjValueType> ObjValueType for T {
+    type Target = Arc<Self>;
+}
+
 #[repr(C)]
 pub struct Obj<T>(*mut c_void, PhantomData<T>);
 
@@ -39,16 +45,13 @@ where
 mod tests {
     #[test]
     fn arc_obj_value() {
-        use super::{Obj, ObjValueType};
-        use std::sync::Arc;
+        use super::{Obj, ArcObjValueType};
 
-        struct ArcObjValueType(i32);
+        struct ArcObjValue(i32);
 
-        impl ObjValueType for ArcObjValueType {
-            type Target = Arc<ArcObjValueType>;
-        }
+        impl ArcObjValueType for ArcObjValue {}
 
-        let obj = Obj::from_value(ArcObjValueType(12345));
+        let obj = Obj::from_value(ArcObjValue(12345));
         let arc = unsafe { Obj::into_target(obj) };
         assert_eq!(arc.0, 12345);
     }

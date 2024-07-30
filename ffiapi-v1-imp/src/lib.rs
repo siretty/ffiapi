@@ -1,5 +1,6 @@
-pub mod arg;
 pub mod obj;
+
+pub use obj::{Obj, ObjValueType};
 
 // use core::ffi::c_void;
 // use std::sync::Arc;
