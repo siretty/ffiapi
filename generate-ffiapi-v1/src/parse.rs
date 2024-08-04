@@ -24,7 +24,7 @@ pub use self::{
     parse_result::ParseResult,
 };
 
-pub fn document(input: &Input, input_pair: Pair<Rule>) -> ParseResult<Document> {
+pub fn document(input: &Input, input_pair: Pair<Rule>) -> ParseResult<Ast<Document>> {
     assert_as_rule_eq!(input_pair, Rule::Document);
     let src = Some(Src::from_pair(input, &input_pair));
 
@@ -41,7 +41,7 @@ pub fn document(input: &Input, input_pair: Pair<Rule>) -> ParseResult<Document> 
         }
     }
 
-    Ok(Document { src, items })
+    Ok(Ast::new(Document { items }, src))
 }
 
 fn document_item(input: &Input, input_pair: Pair<Rule>) -> ParseResult<DocumentItem> {
@@ -50,12 +50,27 @@ fn document_item(input: &Input, input_pair: Pair<Rule>) -> ParseResult<DocumentI
 
     let item_pair = checked_take_last_some!(input_inner);
     match item_pair.as_rule() {
-        Rule::Enumeration => {
-            let model = (input, item_pair)?;
-            Ok(DocumentItem::Enumeration(model))
+        Rule::FfiEnumeration => {
+            let model = ffi_enumeration(input, item_pair)?;
+            Ok(DocumentItem::FfiEnumeration(model))
         }
         rule => assert_other_rule!(rule),
     }
+}
+
+fn ffi_enumeration(input: &Input, pair: Pair<Rule>) -> ParseResult<Ast<FfiEnumeration>> {
+    assert_as_rule_eq!(pair, Rule::FfiEnumeration);
+    let src = Some(Src::from_pair(input, &pair));
+    let mut inner = pair.into_inner();
+
+    let name = (
+        _parse_next(input, &mut inner, parse_identifier)?,
+        _parse_next(input, &mut inner, parse_identifier)?,
+    );
+    let code = _parse_next(input, &mut inner, parse_number)?;
+    let items = _parse_homogeneous_remainder(input, inner, parse_module_item, Rule::ModuleItem)?;
+
+    Ok(Rc::new(Module { src, name, code, items }))
 }
 
 // fn parse_module(input: &Input, pair: Pair<Rule>) -> ParseResult<Rc<Module>> {

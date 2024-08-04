@@ -1,13 +1,14 @@
+use core::fmt::Debug;
 use crate::grammar::Rule;
 use derive_debug::Dbg;
 use pest::iterators::Pair;
-use std::rc::Rc;
+use std::{path::PathBuf, rc::Rc};
 
 // Support Types
 
 #[derive(Clone, Debug)]
 pub struct Input {
-    pub path: Option<Rc<str>>,
+    pub path: Option<Rc<PathBuf>>,
     pub text: Option<Rc<str>>,
 }
 
@@ -29,42 +30,62 @@ impl Src {
     }
 }
 
+#[derive(Clone, Dbg)]
+pub struct Ast<T: Debug>(pub Rc<T>, #[dbg(skip)] pub Option<Src>);
+
+impl<T: Debug> Ast<T> {
+    pub fn new(value: T, src: Option<Src>) -> Self {
+        Self(Rc::new(value), src)
+    }
+
+    pub fn as_src(&self) -> Option<&Src> { self.1.as_ref() }
+
+    pub fn as_src_mut(&mut self) -> Option<&mut Src> { self.1.as_mut() }
+}
+
+impl<T: Debug> core::ops::Deref for Ast<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        self.0.deref()
+    }
+}
+
 // AST Types
 
-#[derive(Dbg)]
+#[derive(Debug)]
 pub struct Document {
-    #[dbg(skip)]
-    pub src: Option<Src>,
     pub items: Vec<DocumentItem>,
 }
 
-impl Document {
-    pub fn modules(&self) -> Vec<Rc<Module>> {
-        self.items.iter()
-            .filter_map(|item| match item {
-                DocumentItem::Module(rc_module) => Some(rc_module.clone()),
-                _ => None,
-            })
-            .collect()
-    }
+impl Ast<Document> {
+    //pub fn modules(&self) -> Vec<Rc<Module>> {
+    //    self.items.iter()
+    //        .filter_map(|item| match item {
+    //            DocumentItem::Module(rc_module) => Some(rc_module.clone()),
+    //            _ => None,
+    //        })
+    //        .collect()
+    //}
 }
 
 #[derive(Debug)]
 pub enum DocumentItem {
-    Enumeration(Rc<Enumeration>),
+    FfiEnumeration(Ast<FfiEnumeration>),
 }
 
 #[derive(Dbg)]
-pub struct Enumeration {
+pub struct FfiEnumeration {
     #[dbg(skip)]
     pub src: Option<Src>,
-    pub name: Identifier,
+    pub name: Ast<Identifier>,
+    pub items: Vec<Ast<FfiEnumerationEnumerator>>,
 }
 
 #[derive(Dbg)]
-pub struct EnumerationItem {
-    #[dbg(skip)]
-    pub stc: Option<Src>,
+pub struct FfiEnumerationEnumerator {
+    pub name: Ast<Identifier>,
+    pub value: Option<Ast<Type>>,
 }
 
 // #[derive(Dbg)]
@@ -355,16 +376,16 @@ pub struct EnumerationItem {
 //         self.0.as_ref()
 //     }
 // }
-//
-// #[derive(Dbg)]
-// pub enum Type {
-//     Ref(Rc<Type>, #[dbg(skip)] Option<Src>),
-//     Mut(Rc<Type>, #[dbg(skip)] Option<Src>),
-//     Slice(Rc<Type>, #[dbg(skip)] Option<Src>),
-//     Array(Rc<Type>, Rc<IntegerLiteral>, #[dbg(skip)] Option<Src>),
-//     CodeType(Rc<Identifier>, #[dbg(skip)] Option<Src>),
-//     Qualified(Vec<Rc<Identifier>>, #[dbg(skip)] Option<Src>),
-// }
+
+#[derive(Dbg)]
+pub enum Type {
+    Ref(Ast<Type>),
+    Mut(Ast<Type>),
+    Slice(Rc<Type>, #[dbg(skip)] Option<Src>),
+    Array(Rc<Type>, Rc<IntegerLiteral>, #[dbg(skip)] Option<Src>),
+    CodeType(Rc<Identifier>, #[dbg(skip)] Option<Src>),
+    Qualified(Vec<Rc<Identifier>>, #[dbg(skip)] Option<Src>),
+}
 
 #[derive(Dbg)]
 pub struct Identifier(pub Rc<str>, #[dbg(skip)] pub Option<Src>);
