@@ -1,0 +1,23 @@
+{#- -#} inline
+{#- ~#} auto
+{#- ~#} $( interface.name() )$::$( ctor.name() )$
+{#- -#} ( {#- -#} $( ctor.parameters.clone()|parameter_list )$ {#- -#} )
+{#- ~#} -> $( interface.name() )$
+{#~ -#} {
+    {#+ -#} $( interface.name() )$ $( interface.name() )$_;
+    {#+ -#} ::$( module.api_name() )$::$( module.module_name() )$::ffi
+    {#- -#} ::$( module.api_name() )$
+    {#- -#}     _$( module.module_name() )$
+    {#- -#}     _$( interface.name() )$
+    {#- -#}     _$( ctor.name() )$
+    {%- if ctor.parameters.is_empty() -%}
+        {#- -#} ( {#- -#} &$( interface.name() )$_.interface_data {#- -#} );
+    {%- else %}
+        {#- -#} (
+            {#- -#} $( ctor.parameters.clone()|ffi_argument_list )$,
+            {#- +#} &$( interface.name() )$_.interface_data
+        {#- -#} );
+    {%- endif %}
+    {#+ -#} return $( interface.name() )$_;
+{#~ -#} }
+{#- -#}

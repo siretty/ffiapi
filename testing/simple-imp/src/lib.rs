@@ -1,5 +1,4 @@
 use ffiapi_v1_imp::obj::{Obj, ArcObjValueType};
-use std::sync::Arc;
 
 #[derive(Default)]
 pub struct Thing {

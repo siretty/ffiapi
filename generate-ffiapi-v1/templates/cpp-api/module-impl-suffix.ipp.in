@@ -1,0 +1,7 @@
+namespace $( module.api_name() )$ {
+namespace $( module.module_name() )$ {
+{%~ for interface in module.interfaces() ~%}
+{% include "cpp-api/module/interface-impl.hpp.in" %}
+{%- endfor %}
+} // namespace $( module.module_name() )$
+} // namespace $( module.api_name() )$

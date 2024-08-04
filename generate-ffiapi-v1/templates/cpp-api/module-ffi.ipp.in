@@ -1,0 +1,12 @@
+namespace $( module.api_name() )$ {
+namespace $( module.module_name() )$ {
+namespace ffi {
+{%~ for interface in module.interfaces() ~%}
+using $( interface.name() )$ = ::$( module.api_name() )$::$( module.module_name() )$::$( interface.name() )$::interface_data_type;
+{%~ endfor %}
+{%- for interface in module.interfaces() -%}
+{% include "cpp-api/module/interface-ffi.hpp.in" %}
+{%- endfor %}
+} // namespace ffi
+} // namespace $( module.module_name() )$
+} // namespace $( module.api_name() )$

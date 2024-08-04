@@ -1,0 +1,24 @@
+struct $( interface.name() )$
+    : ::$( module.api_name() )$::interface_storage<2 * sizeof(void *), alignof(void *)>
+{
+    consteval $( interface.name() )$() noexcept = default;
+
+    ~$( interface.name() )$();
+
+public: // ctors
+    {%- for ctor in interface.ctors() ~%}
+    {% include "cpp-api/module/interface/ctor.hpp.in" %}
+    {%~ endfor %}
+public: // dtors
+    {%- for dtor in interface.dtors() ~%}
+    {% include "cpp-api/module/interface/dtor.hpp.in" %}
+    {%~ endfor %}
+public: // methods
+    {%- for method in interface.methods() ~%}
+    {% include "cpp-api/module/interface/method.hpp.in" %}
+    {%~ endfor ~%}
+public: // verbatim cppapi declarations
+    {%- for verbatim in interface.verbatim_items("cppapi", "declaration") ~%}
+    $( verbatim.content.as_str() )$
+    {%~ endfor ~%}
+};

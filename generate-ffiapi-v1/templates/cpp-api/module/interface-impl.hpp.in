@@ -1,0 +1,20 @@
+inline $( interface.name() )$::~$( interface.name() )$()
+{
+{%- set interface_dtors = interface.dtors() -%}
+{%- for dtor in interface_dtors.iter().take(1) %}
+    $( dtor.name() )$();
+{%~ endfor -%}
+}
+
+{%~ for ctor in interface.ctors() ~%}
+{% include "cpp-api/module/interface/ctor-impl.hpp.in" %}
+{%~ endfor -%}
+{%- for dtor in interface.dtors() ~%}
+{% include "cpp-api/module/interface/dtor-impl.hpp.in" %}
+{%~ endfor -%}
+{%- for method in interface.methods() ~%}
+{% include "cpp-api/module/interface/method-impl.hpp.in" %}
+{%~ endfor -%}
+{%- for verbatim in interface.verbatim_items("cppapi", "definition") ~%}
+$( verbatim.content.as_str() )$
+{%~ endfor ~%}

@@ -1,0 +1,11 @@
+{% for command in module.commands() ~%}
+{% include "./module/command.rs.in" %}
+{%~ endfor %}
+
+{% for event in module.events() ~%}
+{% include "./module/event.rs.in" %}
+{%~ endfor %}
+
+{% for interface in module.interfaces() ~%}
+{% include "./module/interface.rs.in" %}
+{%~ endfor %}

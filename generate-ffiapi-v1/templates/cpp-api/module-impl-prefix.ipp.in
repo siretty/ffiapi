@@ -1,0 +1,27 @@
+namespace $( module.api_name() )$ {
+namespace $( module.module_name() )$ {
+namespace _impl {
+
+consteval auto get_module_code() -> ::$( module.api_name() )$::module_code
+{
+    return ::$( module.api_name() )$::module_code{$( module.code() )$};
+}
+
+consteval auto make_error_code(error_code::code_type code) -> error_code
+{
+    return error_code{get_module_code(), code};
+}
+
+consteval auto make_command_code(command_code::code_type code) -> command_code
+{
+    return command_code{get_module_code(), code};
+}
+
+consteval auto make_event_code(event_code::code_type code) -> event_code
+{
+    return event_code{get_module_code(), code};
+}
+
+} // namespace _impl
+} // namespace $( module.module_name() )$
+} // namespace $( module.api_name() )$

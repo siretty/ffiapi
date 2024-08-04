@@ -1,0 +1,9 @@
+{%~ for method in interface.ctors() ~%}
+{% include "cpp-api/module/interface/ctor-ffi.hpp.in" %}
+{%~ endfor -%}
+{%- for method in interface.dtors() ~%}
+{% include "cpp-api/module/interface/dtor-ffi.hpp.in" %}
+{%~ endfor -%}
+{%- for method in interface.methods() ~%}
+{% include "cpp-api/module/interface/method-ffi.hpp.in" %}
+{%~ endfor -%}

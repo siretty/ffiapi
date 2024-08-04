@@ -1,0 +1,37 @@
+#pragma once
+
+#include "../common.hpp"
+
+#include "./$( module.module_name() )$-impl-prefix.ipp"
+
+namespace $( module.api_name() )$ {
+namespace $( module.module_name() )$ {
+
+using ::$( module.api_name() )$::$( module.module_name() )$::_impl::get_module_code;
+using ::$( module.api_name() )$::$( module.module_name() )$::_impl::make_error_code;
+
+namespace err {
+{% for error in module.errors() ~%}
+{% include "cpp-api/module/error.hpp.in" %}
+{%~ endfor %}
+} // namespace err
+
+namespace cmd {
+{% for command in module.commands() ~%}
+{% include "cpp-api/module/command.hpp.in" %}
+{%~ endfor %}
+} // namespace cmd
+
+namespace evt {
+{% for event in module.events() ~%}
+{% include "cpp-api/module/event.hpp.in" %}
+{%~ endfor %}
+} // namespace evt
+{% for interface in module.interfaces() ~%}
+{% include "cpp-api/module/interface.hpp.in" %}
+{%~ endfor %}
+} // namespace $( module.module_name() )$
+} // namespace $( module.api_name() )$
+
+#include "./$( module.module_name() )$-ffi.ipp"
+#include "./$( module.module_name() )$-impl-suffix.ipp"

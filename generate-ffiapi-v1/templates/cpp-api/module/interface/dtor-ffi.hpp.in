@@ -1,0 +1,10 @@
+{#- -#} extern "C"
+{#- +#} $( module.api_name().to_uppercase() )$_FFI_ATTR
+{#- +#} void
+{#- +#} $( module.api_name().to_uppercase() )$_FFI_CALL
+{#- +#} $( module.api_name() )$
+    {#- -#}     _$( module.module_name() )$
+    {#- -#}     _$( interface.name() )$
+    {#- -#}     _$( method.name() )$
+{#- -#} ( {#- -#} $( interface.name() )$ * _this {#- -#} );
+{#- -#}

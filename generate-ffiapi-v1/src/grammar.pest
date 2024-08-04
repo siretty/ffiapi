@@ -1,0 +1,111 @@
+// Document
+
+Document = { SOI ~ WHITESPACE * ~ DocumentItem * ~ EOI }
+DocumentItem = { FfiEnumeration | FfiFunction }
+
+// Enumeration
+
+FfiEnumeration = { "ffi" ~ "enumeration" ~ Identifier ~ ":" ~ Type ~ "{" ~ _FfiEnumerationContent ~ "}" }
+_FfiEnumerationContent = { FfiEnumerationItem ~ ( "," ~ FfiEnumerationItem ) * ~ "," ? }
+
+FfiEnumerationItem = { Identifier ~ ( "=" ~ IntegerLiteral ) ? }
+
+FfiFunction = { "ffi" ~ "function" ~ Identifier ~ "(" ~ _FfiFunctionParameterList ~ ")" ~ "->" ~ Type }
+_FfiFunctionParameterList = { FfiFunctionParameter ~ ( "," ~ FfiFunctionParameter ) * ~ "," ? }
+FfiFunctionParameter = { "x" }
+
+// // Module
+//
+// Module = { "module" ~ Identifier ~ "." ~ Identifier ~ _Assign ~ Number ~ _LBlock ~ ModuleItem * ~ _RBlock }
+// ModuleItem = { Error | Command | Event | Interface }
+//
+// // Error
+//
+// Error = { "error" ~ Identifier ~ _Assign ~ Number ~ _Terminator }
+//
+// // Command
+//
+// Command = { "command" ~ Identifier ~ _Assign ~ Number ~ _LBlock ~ _CommandContent ? ~ _RBlock }
+// _CommandContent = _{ Member ~ ( "," ~ Member ) * ~ "," ? }
+//
+// // Event
+//
+// Event = { "event" ~ Identifier ~ _Assign ~ Number ~ _LBlock ~ _EventContent ? ~ _RBlock }
+// _EventContent = _{ Member ~ ( "," ~ Member ) * ~ "," ? }
+//
+// // Member
+//
+// Member = { Identifier ~ ":" ~ Type }
+//
+// // Interface
+//
+// Interface = { "interface" ~ Identifier ~ _LBlock ~ _InterfaceContent ~ _RBlock }
+// _InterfaceContent = _{ InterfaceItem * }
+// InterfaceItem = { InterfaceCtor | InterfaceDtor | InterfaceMethod | Verbatim }
+//
+// InterfaceCtor = {
+//         ( "ctor" ~ Identifier ~ "(" ~ ")" ~ _Terminator )
+//     |   ( "ctor" ~ Identifier ~ "(" ~ _ParameterList ? ~ ")" ~ _Terminator )
+// }
+// InterfaceDtor = { "dtor" ~ Identifier ~ _Terminator }
+// InterfaceMethod = {
+//         ( "method" ~ Identifier ~ "(" ~ ")" ~ ( "->" ~ Type ) ? ~ _Terminator )
+//     |   ( "method" ~ Identifier ~ "(" ~ _ParameterList ? ~ ")" ~ ( "->" ~ Type ) ? ~ _Terminator )
+// }
+// Verbatim = {
+//     "verbatim" ~ Identifier ~ Identifier ~ "#{" ~ VerbatimContent ~ "}#"
+// }
+//
+// _ParameterList = _{ Parameter ~ ( "," ~ Parameter ) * ~ "," ? }
+// Parameter = { Identifier ~ ":" ~ Type }
+//
+// VerbatimContent = @{
+//     ( !"}#" ~ ANY )+
+// }
+//
+// // Common
+//
+// Qualified = { Identifier ~ ( _Separator ~ Identifier ) * }
+//
+// CodeType = { "code" ~ Identifier }
+
+// _LBlock = _{ "{" }
+// _RBlock = _{ "}" }
+//
+// _Separator = _{ "." }
+// _Terminator = _{ ";" }
+//
+// _Assign = _{ "=" }
+
+Type = {
+        RefType
+    |   MutType
+    |   ArrayType
+    |   NamedType
+}
+
+RefType = { "ref" ~ "<" ~ Type ~ ">" }
+MutType = { "mut" ~ "<" ~ Type ~ ">" }
+ArrayType = { "[" ~ Type ~ ";" ~ IntegerLiteral ~ "]" }
+NamedType = { Identifier }
+
+Identifier = @{ _IdentifierSymbolFirst ~ _IdentifierSymbolLater * }
+_IdentifierSymbolFirst = _{ ASCII_ALPHA | "_" }
+_IdentifierSymbolLater = _{ ASCII_ALPHANUMERIC | "_" }
+
+IntegerLiteral = { _IntegerLiteralContent }
+_IntegerLiteralContent = _{ _DecIntegerLiteral | _HexIntegerLiteral | _BinIntegerLiteral | _OctIntegerLiteral }
+
+_BinIntegerLiteral = @{ "0b" ~ ASCII_BIN_DIGIT + }
+_OctIntegerLiteral = @{ "0o" ~ ASCII_OCT_DIGIT + }
+_DecIntegerLiteral = @{ "0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT * }
+_HexIntegerLiteral = @{ "0x" ~ ASCII_HEX_DIGIT + }
+
+// Builtin
+
+COMMENT = _{ _LineComment }
+_LineComment = @{ "//" ~ ( ! _NL ~ ANY ) * }
+
+WHITESPACE = _{ " " | "\t" | _NL }
+
+_NL = @{ "\n" }

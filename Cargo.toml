@@ -2,5 +2,6 @@
 resolver = "2"
 members = [
     "ffiapi-v1-imp",
+    "generate-ffiapi-v1",
     "testing/simple-imp",
 ]

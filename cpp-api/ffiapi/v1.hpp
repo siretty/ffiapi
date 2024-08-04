@@ -15,10 +15,12 @@
 // headers
 #include "ffiapi/v1/obj.hpp"
 
+// template sources
+#include "ffiapi/v1/obj.ipp"
+
 #if defined(FFIAPI_V1_INCLUDE_SOURCE) || !defined(FFIAPI_V1_COMPILED_SOURCE)
 
 // sources
-#include "ffiapi/v1/obj.ipp"
 
 #endif
 

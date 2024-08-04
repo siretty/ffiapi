@@ -1,0 +1,4 @@
+struct $( event.name() )$ : ::$( module.api_name() )$::basic_event<$( module.code() )$, $( event.code() )$>
+{{% for member in event.members %}
+    $( member.type_.clone()|cpp_type )$ $( member.name() )$;
+{% endfor %}};

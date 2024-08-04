@@ -1,0 +1,6 @@
+#pragma once
+
+#include "./bits/$( api_name )$/common.hpp"
+{% for module in modules -%}
+#include "./bits/$( api_name )$/modules/$( module.module_name() )$.hpp"
+{%~ endfor %}

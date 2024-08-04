@@ -1,0 +1,4 @@
+struct $( command.name() )$ : ::$( module.api_name() )$::basic_command<$( module.code() )$, $( command.code() )$>
+{{% for member in command.members %}
+    $( member.type_.clone()|cpp_type )$ $( member.name() )$;
+{% endfor %}};

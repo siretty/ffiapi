@@ -1,0 +1,13 @@
+{#- -#} inline
+{#- ~#} void
+{#- ~#} $( interface.name() )$::$( dtor.name() )$
+{#- -#} ()
+{#~ -#} {
+    {#+ -#} ::$( module.api_name() )$::$( module.module_name() )$::ffi
+    {#- -#} ::$( module.api_name() )$
+    {#- -#}     _$( module.module_name() )$
+    {#- -#}     _$( interface.name() )$
+    {#- -#}     _$( dtor.name() )$
+    {#- -#} (&this->interface_data);
+{#~ -#} }
+{#- -#}

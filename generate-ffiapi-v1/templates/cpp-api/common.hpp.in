@@ -1,0 +1,143 @@
+#pragma once
+
+#include <cstddef>
+#include <cstdint>
+
+#include <array>
+#include <type_traits>
+
+namespace $( api_name )$ {
+
+using pointer = void *;
+
+using size = std::size_t;
+
+using u64 = std::uint64_t;
+
+// module_code
+
+struct module_code
+{
+    using code_type = std::uint32_t;
+    code_type code;
+};
+
+static_assert(sizeof(module_code) == sizeof(module_code::code_type), "");
+
+// error_code
+
+struct error_code
+{
+    using code_type = std::uint32_t;
+    module_code module;
+    code_type code;
+};
+
+static_assert(sizeof(error_code) == sizeof(module_code) + sizeof(error_code::code_type), "");
+
+// event_code
+
+struct event_code
+{
+    using code_type = std::uint32_t;
+    module_code module;
+    code_type code;
+};
+
+static_assert(sizeof(event_code) == sizeof(module_code) + sizeof(event_code::code_type), "");
+
+// basic_event
+
+template <module_code::code_type module_code, event_code::code_type code>
+struct basic_event
+{
+    static constexpr ::$( api_name )$::event_code CODE{::$( api_name )$::module_code{module_code}, code};
+};
+
+// command_code
+
+struct command_code
+{
+    using code_type = std::uint32_t;
+    module_code module;
+    code_type code;
+};
+
+static_assert(sizeof(command_code) == sizeof(module_code) + sizeof(command_code::code_type), "");
+
+// basic_command
+
+template <module_code::code_type module_code_value, command_code::code_type command_code_value>
+struct basic_command
+{
+    static constexpr ::acesu::command_code COMMAND_CODE{
+        ::acesu::module_code{module_code_value},
+        command_code_value,
+    };
+};
+
+template <typename T>
+constexpr auto get_command_code(const T &) -> command_code
+{
+    return T::COMMAND_CODE;
+}
+
+// user_data
+
+struct user_data
+{
+    module_code module;
+    std::uint32_t code;
+    std::uint64_t data;
+};
+
+} // namespace $( api_name )$
+
+namespace $( api_name )$ {
+
+template<std::size_t size, std::size_t alignment>
+struct interface_storage
+{
+    using interface_data_type = std::aligned_storage_t<size, alignment>;
+    [[no_unique_address]] interface_data_type interface_data;
+
+    consteval interface_storage() noexcept = default;
+};
+
+} // namespace $( api_name )$
+
+#if defined($( api_name.to_uppercase() )$_FFI_EXPORT_STATIC)
+#   if defined($( api_name.to_uppercase() )$_FFI_ATTR)
+        // do nothing, user defined ffi static linkage
+#   else
+#       define $( api_name.to_uppercase() )$_FFI_ATTR
+#   endif
+#elif defined($( api_name.to_uppercase() )$_FFI_EXPORT_DYNAMIC)
+#   if defined($( api_name.to_uppercase() )$_FFI_ATTR)
+        // do nothing, user defined ffi export linkage
+#   elif defined(_MSC_VER)
+#       define $( api_name.to_uppercase() )$_FFI_ATTR __declspec(dllexport)
+#   elif defined(__GNUC__)
+#       define $( api_name.to_uppercase() )$_FFI_ATTR [[gnu::visibility("default")]]
+#   else
+#       error "$( api_name )$: unknown ffi export linkage, please define $( api_name.to_uppercase() )$_FFI_ATTR yourself"
+#   endif
+#else
+#   if defined($( api_name.to_uppercase() )$_FFI_ATTR)
+        // do nothing, user defined ffi linkage
+#   elif defined(_MSC_VER)
+#       define $( api_name.to_uppercase() )$_FFI_ATTR __declspec(dllimport)
+#   elif defined(__GNUC__)
+#       define $( api_name.to_uppercase() )$_FFI_ATTR // no visibility attribute
+#   else
+#       error "$( api_name )$: unknown ffi export linkage, please define $( api_name.to_uppercase() )$_FFI_ATTR yourself"
+#   endif
+#endif
+
+#ifdef _MSC_VER
+#   define $( api_name.to_uppercase() )$_FFI_CALL __cdecl
+#   define $( api_name.to_uppercase() )$_FFI_FPTR __cdecl
+#else
+#   define $( api_name.to_uppercase() )$_FFI_CALL
+#   define $( api_name.to_uppercase() )$_FFI_FPTR
+#endif

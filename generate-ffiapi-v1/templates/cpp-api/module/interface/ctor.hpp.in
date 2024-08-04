@@ -1,0 +1,1 @@
+static auto $( ctor.name() )$($( ctor.parameters.clone()|parameter_list )$) -> $( interface.name() )$;

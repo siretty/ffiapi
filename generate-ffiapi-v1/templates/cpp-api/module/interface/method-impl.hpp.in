@@ -1,0 +1,39 @@
+{#- -#} inline
+{#- ~#} auto
+{#- +#} $( interface.name() )$::$( method.name() )$
+{%- if method.parameters.is_empty() -%}
+    {#- -#} ()
+{%- else %}
+    {#- -#} ( {#- -#} $( method.parameters.clone()|parameter_list )$ {#- -#} )
+{%- endif -%}
+{#- +#} -> $( method.return_type.clone()|cpp_type_or_void )$
+{#~ -#} {
+    {%+ if !method.return_type.is_none() -%}
+        {#- -#} $( method.return_type.clone()|cpp_ffi_type_or_void )$ _result;
+    {%- endif +%}
+    {#+ -#} ::$( module.api_name() )$::$( module.module_name() )$::ffi
+    {#- -#} ::$( module.api_name() )$
+    {#- -#}     _$( module.module_name() )$
+    {#- -#}     _$( interface.name() )$
+    {#- -#}     _$( method.name() )$
+    {%- if method.parameters.is_empty() -%}
+        {#- -#} (
+            {#- -#} &this->interface_data
+            {%- if !method.return_type.is_none() -%}
+                {#- -#} , $( method.return_type.clone().unwrap()|ffi_return_value )$
+            {%- endif -%}
+        {#- -#} );
+    {%- else %}
+        {#- -#} (
+            {#- -#} &this->interface_data,
+            {#- +#} $( method.parameters.clone()|ffi_argument_list )$
+            {%- if !method.return_type.is_none() -%}
+                {#- -#} , $( method.return_type.clone().unwrap()|ffi_return_value )$
+            {%- endif -%}
+        {#- -#} );
+    {%- endif %}
+    {%+ if !method.return_type.is_none() -%}
+        {#- -#} return _result;
+    {%- endif %}
+{#~ -#} }
+{#- -#}

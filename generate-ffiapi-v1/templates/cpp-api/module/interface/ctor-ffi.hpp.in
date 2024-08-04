@@ -1,0 +1,16 @@
+{#- -#} extern "C"
+{#- +#} $( module.api_name().to_uppercase() )$_FFI_ATTR
+{#- +#} auto
+{#- +#} $( module.api_name().to_uppercase() )$_FFI_CALL
+{#- +#} $( module.api_name() )$
+    {#- -#}     _$( module.module_name() )$
+    {#- -#}     _$( interface.name() )$
+    {#- -#}     _$( method.name() )$
+{%- if method.parameters.is_empty() -%}
+    {#- -#} ( {#- -#} $( interface.name() )$ * _this {#- -#} )
+{%- else %}
+    {#- -#} ( {#- -#} $( method.parameters.clone()|ffi_parameter_list )$,
+    {#- +#} $( interface.name() )$ * _this {#- -#} )
+{%- endif -%}
+{#- +#} -> ::$( module.api_name() )$::error_code;
+{#- -#}

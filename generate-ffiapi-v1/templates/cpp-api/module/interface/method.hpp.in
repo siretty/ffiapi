@@ -1,0 +1,1 @@
+auto $( method.name() )$($( method.parameters.clone()|parameter_list )$) -> $( method.return_type.clone()|cpp_type_or_void )$;
